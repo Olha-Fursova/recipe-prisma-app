@@ -10,14 +10,12 @@ export const CreateRecipeSchema = z.object({
   instructions: z.string().min(20),
   cookingTime: z.number().int().min(1).max(1440),
   servings: z.number().int().min(1).max(100),
-  cheffName: z.string().min(2).max(50),
+  chefName: z.string().min(2).max(50),
   categoryId: z.number().int().positive(),
   tagIds: z.array(z.number().int().positive()).optional(),
 });
 
-export const UpdateRecipeSchema = CreateRecipeSchema.omit({
-  tagIds: true,
-})
+export const UpdateRecipeSchema = CreateRecipeSchema.omit({ tagIds: true })
   .extend({ tagIds: z.array(z.number().int().positive()).optional() })
   .partial()
   .refine((data) => Object.keys(data).length > 0, {

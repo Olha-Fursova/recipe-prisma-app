@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Request, Response, NextFunction } from "express";
 
-export const validateBody = <T extends z.ZodTypeAny>(schema: T) => {
+export const validateBody =
+  <T extends z.ZodTypeAny>(schema: T) =>
   (req: Request<{}, {}, z.infer<T>>, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
     if (!result.success) {
@@ -19,9 +20,9 @@ export const validateBody = <T extends z.ZodTypeAny>(schema: T) => {
     req.body = result.data;
     next();
   };
-};
 
-export const validateParams = <T extends z.ZodTypeAny>(schema: T) => {
+export const validateParams =
+  <T extends z.ZodTypeAny>(schema: T) =>
   (req: Request<z.infer<T>>, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.params);
 
@@ -35,9 +36,9 @@ export const validateParams = <T extends z.ZodTypeAny>(schema: T) => {
     req.params = result.data;
     next();
   };
-};
 
-export const validateQuery = <T extends z.ZodTypeAny>(schema: T) => {
+export const validateQuery =
+  <T extends z.ZodTypeAny>(schema: T) =>
   (
     req: Request,
     res: Response<any, { query: z.infer<T> }>,
@@ -54,4 +55,3 @@ export const validateQuery = <T extends z.ZodTypeAny>(schema: T) => {
     res.locals.query = result.data;
     next();
   };
-};

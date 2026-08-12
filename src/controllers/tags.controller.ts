@@ -1,17 +1,10 @@
 import type { Request, Response } from "express";
 import prisma from "../../prisma/client.ts";
-
-// Models ==============================================================
-
-type TagParams = {
-  id: string;
-};
-
-type CreateTagBody = {
-  name: string;
-};
-
-type UpdateTagBody = Partial<CreateTagBody>;
+import type {
+  TagParams,
+  CreateTagBody,
+  UpdateTagBody,
+} from "../validators/tag.validator.ts";
 
 // GET all tags ==============================================================
 
@@ -26,7 +19,7 @@ export const getTagById = async (req: Request<TagParams>, res: Response) => {
   const { id } = req.params;
 
   const tag = await prisma.tag.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: id },
     include: { recipes: true },
   });
 
@@ -62,7 +55,7 @@ export const updateTag = async (
   const { name } = req.body;
 
   const tag = await prisma.tag.update({
-    where: { id: parseInt(id) },
+    where: { id: id },
     data: { name },
   });
 
@@ -75,7 +68,7 @@ export const deleteTag = async (req: Request<TagParams>, res: Response) => {
   const { id } = req.params;
 
   await prisma.tag.delete({
-    where: { id: parseInt(id) },
+    where: { id: id },
   });
 
   res.status(204).send();

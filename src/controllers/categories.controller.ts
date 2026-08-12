@@ -1,18 +1,10 @@
 import type { Request, Response } from "express";
 import prisma from "../../prisma/client.ts";
-
-// Models ==============================================================
-
-type CategoryParams = {
-  id: string;
-};
-
-type CreateCategoryBody = {
-  name: string;
-  description?: string;
-};
-
-type UpdateCategoryBody = Partial<CreateCategoryBody>;
+import type {
+  CategoryParams,
+  CreateCategoryBody,
+  UpdateCategoryBody
+} from "../validators/category.validator.ts";
 
 // GET all categories ==============================================================
 
@@ -30,7 +22,7 @@ export const getCategoryById = async (
   const { id } = req.params;
 
   const category = await prisma.category.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: id },
     include: { recipes: true },
   });
 
@@ -66,7 +58,7 @@ export const updateCategory = async (
   const { name, description } = req.body;
 
   const category = await prisma.category.update({
-    where: { id: parseInt(id) },
+    where: { id: id },
     data: { name, description },
   });
 
@@ -82,7 +74,7 @@ export const deleteCategory = async (
   const { id } = req.params;
 
   await prisma.category.delete({
-    where: { id: parseInt(id) },
+    where: { id: id },
   });
 
   res.status(204).send();

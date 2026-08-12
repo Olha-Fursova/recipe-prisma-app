@@ -1,23 +1,11 @@
 import type { Request, Response } from "express";
 import prisma from "../../prisma/client.ts";
-
-// Models ==============================================================
-
-type ReviewParams = {
-  id: string;
-};
-
-type RecipeReviewParams = {
-  recipeId: string;
-};
-
-type CreateReviewBody = {
-  content: string;
-  rating: number;
-  reviewerName: string;
-};
-
-type UpdateReviewBody = Partial<Pick<CreateReviewBody, "content" | "rating">>;
+import type {
+  ReviewParams,
+  RecipeReviewParams,
+  CreateReviewBody,
+  UpdateReviewBody,
+} from "../validators/review.validator.ts";
 
 // Get review by recipe ==============================================================
 
@@ -28,7 +16,7 @@ export const getReviewsByRecipe = async (
   const { recipeId } = req.params;
 
   const reviews = await prisma.review.findMany({
-    where: { recipeId: parseInt(recipeId) },
+    where: { recipeId: recipeId },
   });
 
   res.status(200).json(reviews);
@@ -49,7 +37,7 @@ export const createReview = async (
       rating,
       reviewerName,
       recipe: {
-        connect: { id: parseInt(recipeId) },
+        connect: { id: recipeId },
       },
     },
   });
@@ -67,7 +55,7 @@ export const updateReview = async (
   const { content, rating } = req.body;
 
   const review = await prisma.review.update({
-    where: { id: parseInt(id) },
+    where: { id: id },
     data: { content, rating },
   });
 
@@ -83,7 +71,7 @@ export const deleteReview = async (
   const { id } = req.params;
 
   await prisma.review.delete({
-    where: { id: parseInt(id) },
+    where: { id: id },
   });
 
   res.status(204).send();

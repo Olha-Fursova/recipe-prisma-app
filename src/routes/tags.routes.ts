@@ -1,12 +1,27 @@
-import express from 'express'
-import * as tagsController from '../controllers/tags.controller.ts'
+import express from "express";
+import * as tagsController from "../controllers/tags.controller.ts";
+import { validateBody, validateParams } from "../middleware/validate.ts";
+import {
+  CreateTagSchema,
+  UpdateTagSchema,
+  TagParamsSchema,
+} from "../validators/tag.validator.ts";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', tagsController.getAllTags)
-router.get('/:id', tagsController.getTagById)
-router.post('/', tagsController.createTag)
-router.patch('/:id', tagsController.updateTag)
-router.delete('/:id', tagsController.deleteTag)
+router.get("/", tagsController.getAllTags);
+router.get("/:id", validateParams(TagParamsSchema), tagsController.getTagById);
+router.post("/", validateBody(CreateTagSchema), tagsController.createTag);
+router.patch(
+  "/:id",
+  validateParams(TagParamsSchema),
+  validateBody(UpdateTagSchema),
+  tagsController.updateTag,
+);
+router.delete(
+  "/:id",
+  validateParams(TagParamsSchema),
+  tagsController.deleteTag,
+);
 
-export default router
+export default router;
