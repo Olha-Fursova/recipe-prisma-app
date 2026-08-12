@@ -18,10 +18,13 @@ export const CreateCategorySchema = registry.register(
 
 export const UpdateCategorySchema = registry.register(
   "UpdateCategory",
-  CreateCategorySchema.partial().refine(
-    (data) => Object.keys(data).length > 0,
-    { error: "At least one field must be provided" },
-  ),
+  z.object({
+      name: z.string().min(2).max(50).optional(),
+      description: z.string().max(200).optional(),
+    })
+    .refine((data) => Object.keys(data).length > 0, {
+      error: "At least one field must be provided",
+    }),
 );
 
 export type CategoryParams = z.infer<typeof CategoryParamsSchema>;

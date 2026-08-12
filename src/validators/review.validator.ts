@@ -26,10 +26,7 @@ export const CreateReviewSchema = registry.register(
 
 export const UpdateReviewSchema = registry.register(
   "UpdateReview",
-  CreateReviewSchema.pick({
-    content: true,
-    rating: true,
-  })
+  CreateReviewSchema.pick({ content: true, rating: true })
     .partial()
     .refine((data) => Object.keys(data).length > 0, {
       error: "At least one field must be provided",
@@ -42,60 +39,60 @@ export type CreateReviewBody = z.infer<typeof CreateReviewSchema>;
 export type UpdateReviewBody = z.infer<typeof UpdateReviewSchema>;
 
 registry.registerPath({
-  method: 'get',
-  path: '/api/recipes/{recipeId}/reviews',
-  tags: ['Reviews'],
-  summary: 'Get reviews for a recipe',
+  method: "get",
+  path: "/api/recipes/{recipeId}/reviews",
+  tags: ["Reviews"],
+  summary: "Get reviews for a recipe",
   request: { params: RecipeReviewParamsSchema },
   responses: {
-    200: { description: 'List of reviews retrieved successfully' },
+    200: { description: "List of reviews retrieved successfully" },
   },
-})
+});
 
 registry.registerPath({
-  method: 'post',
-  path: '/api/recipes/{recipeId}/reviews',
-  tags: ['Reviews'],
-  summary: 'Create review for a recipe',
+  method: "post",
+  path: "/api/recipes/{recipeId}/reviews",
+  tags: ["Reviews"],
+  summary: "Create review for a recipe",
   request: {
     params: RecipeReviewParamsSchema,
     body: {
-      content: { 'application/json': { schema: CreateReviewSchema } },
+      content: { "application/json": { schema: CreateReviewSchema } },
     },
   },
   responses: {
-    201: { description: 'Review created successfully' },
-    400: { description: 'Recipe not found' },
-    422: { description: 'Validation error' },
+    201: { description: "Review created successfully" },
+    400: { description: "Recipe not found" },
+    422: { description: "Validation error" },
   },
-})
+});
 
 registry.registerPath({
-  method: 'patch',
-  path: '/api/reviews/{id}',
-  tags: ['Reviews'],
-  summary: 'Update review',
+  method: "patch",
+  path: "/api/reviews/{id}",
+  tags: ["Reviews"],
+  summary: "Update review",
   request: {
     params: ReviewParamsSchema,
     body: {
-      content: { 'application/json': { schema: UpdateReviewSchema } },
+      content: { "application/json": { schema: UpdateReviewSchema } },
     },
   },
   responses: {
-    200: { description: 'Review updated successfully' },
-    404: { description: 'Review not found' },
-    422: { description: 'Validation error' },
+    200: { description: "Review updated successfully" },
+    404: { description: "Review not found" },
+    422: { description: "Validation error" },
   },
-})
+});
 
 registry.registerPath({
-  method: 'delete',
-  path: '/api/reviews/{id}',
-  tags: ['Reviews'],
-  summary: 'Delete review',
+  method: "delete",
+  path: "/api/reviews/{id}",
+  tags: ["Reviews"],
+  summary: "Delete review",
   request: { params: ReviewParamsSchema },
   responses: {
-    204: { description: 'Review deleted successfully' },
-    404: { description: 'Review not found' },
+    204: { description: "Review deleted successfully" },
+    404: { description: "Review not found" },
   },
-})
+});

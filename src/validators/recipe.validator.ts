@@ -18,7 +18,7 @@ export const CreateRecipeSchema = registry.register(
     servings: z.number().int().min(1).max(100),
     chefName: z.string().min(2).max(50),
     categoryId: z.number().int().positive(),
-    tagIds: z.array(z.number().int().positive()).optional(),
+    tagIds: z.array(z.number().int().positive()).default([]),
   }),
 );
 
@@ -33,7 +33,7 @@ export const UpdateRecipeSchema = registry.register(
 );
 
 export const GetRecipesQuerySchema = registry.register(
-  "GetRecipeQuery",
+  "GetRecipesQuery",
   z.object({
     page: z.coerce.number().int().min(1).optional(),
     limit: z.coerce.number().int().min(1).max(100).optional(),

@@ -19,9 +19,30 @@ router.get(
   validateQuery(GetRecipesQuerySchema),
   recipesController.getAllRecipes,
 );
-router.get("/:id", validateParams(RecipeParamsSchema), recipesController.getRecipeById);
-router.post("/",validateBody(CreateRecipeSchema), recipesController.createRecipe);
-router.patch("/:id", validateParams(RecipeParamsSchema), validateBody(UpdateRecipeSchema), recipesController.updateRecipe);
-router.delete("/:id", validateParams(RecipeParamsSchema), recipesController.deleteRecipe);
+
+router.get(
+  "/:id",
+  validateParams(RecipeParamsSchema),
+  recipesController.getRecipeById,
+);
+
+router.post(
+  "/",
+  validateBody(CreateRecipeSchema),
+  recipesController.createRecipe,
+);
+
+router.patch(
+  "/:id",
+  validateParams(RecipeParamsSchema),
+  validateBody(UpdateRecipeSchema),
+  recipesController.updateRecipe,
+);
+
+router.delete(
+  "/:id",
+  validateParams(RecipeParamsSchema),
+  recipesController.deleteRecipe,
+);
 
 export default router;

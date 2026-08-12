@@ -7,7 +7,6 @@ export const validateBody =
     const result = schema.safeParse(req.body);
     if (!result.success) {
       const flattened = z.flattenError(result.error);
-
       return res.status(422).json({
         error: "Validation failed",
         details:
@@ -16,7 +15,6 @@ export const validateBody =
             : flattened.formErrors,
       });
     }
-
     req.body = result.data;
     next();
   };
@@ -25,14 +23,12 @@ export const validateParams =
   <T extends z.ZodTypeAny>(schema: T) =>
   (req: Request<z.infer<T>>, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.params);
-
     if (!result.success) {
       return res.status(400).json({
         error: "Invalid parameters",
         details: z.flattenError(result.error).fieldErrors,
       });
     }
-
     req.params = result.data;
     next();
   };
@@ -51,7 +47,6 @@ export const validateQuery =
         details: z.flattenError(result.error).fieldErrors,
       });
     }
-
     res.locals.query = result.data;
     next();
   };

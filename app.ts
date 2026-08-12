@@ -2,27 +2,26 @@ import express from "express";
 import type { NextFunction, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
 
-import { generateOpenApiDocument } from "./src/openapi.ts";
 import recipesRoutes from "./src/routes/recipes.routes.ts";
 import categoriesRoutes from "./src/routes/categories.routes.ts";
 import tagsRoutes from "./src/routes/tags.routes.ts";
 import reviewsRoutes from "./src/routes/reviews.routes.ts";
+import { generateOpenApiDocument } from "./src/openapi.ts";
 
 const app = express();
 
 app.use(express.json());
 const openApiDocument = generateOpenApiDocument();
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument))
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 app.use("/api/recipes", recipesRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/tags", tagsRoutes);
 app.use("/api", reviewsRoutes);
 
-// 404 not found handler - must be after all routes
+// 404 Not Found handler - must be after all routes
 app.use((_req: Request, res: Response) => {
-  res.status(404).json({ error: "Not Found" });
+  res.status(404).json({ error: "Not found" });
 });
 
 // Error handling middleware
@@ -42,18 +41,16 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     return res.status(404).json({ error: "Resource not found" });
   }
 
-  if ((err.code = "P2002")) {
+  if (err.code === "P2002") {
     return res.status(409).json({ error: "Unique constraint violation" });
   }
 
   if (err.code === "P2003") {
-    return res.status(400).json({ error: "Foreign Key constraint failed" });
+    return res.status(400).json({ error: "Foreign key constraint failed" });
   }
 
   res.status(500).json({ error: "Internal server error" });
 });
-
-// Listener
 
 const PORT = process.env.PORT || 3000;
 

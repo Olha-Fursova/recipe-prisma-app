@@ -10,6 +10,7 @@ import {
 
 const router = express.Router();
 
+// Nested routes для роботи з reviews конкретного рецепту
 router.get(
   "/recipes/:recipeId/reviews",
   validateParams(RecipeReviewParamsSchema),
@@ -21,6 +22,8 @@ router.post(
   validateBody(CreateReviewSchema),
   reviewsController.createReview,
 );
+
+// Flat routes для операцій з конкретним review
 router.patch(
   "/reviews/:id",
   validateParams(ReviewParamsSchema),

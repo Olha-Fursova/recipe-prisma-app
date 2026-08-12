@@ -20,7 +20,6 @@ export function generateOpenApiDocument() {
       description:
         "REST API for managing recipes, categories, tags and reviews",
     },
-    servers: [{ url: "<http://localhost:3000>" }],
+    servers: [{ url: "http://localhost:3000" }],
   });
 }
-
