@@ -5,19 +5,66 @@ import type {
   RecipeParams,
   CreateRecipeBody,
   UpdateRecipeBody,
+  GetRecipesQuery,
 } from "../validators/recipe.validator.ts";
 
 // Get all Recipes ==============================================================
 
-export const getAllRecipes = async (_req: Request, res: Response) => {
-  const recipes = await prisma.recipe.findMany({
-    include: {
-      category: true,
-      tags: true,
+export const getAllRecipes = async (
+  req: Request,
+  res: Response<any, { query: GetRecipesQuery }>,
+) => {
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = "createdAt",
+    order = "desc",
+    categoryId,
+    search,
+  } = res.locals.query;
+
+  const skip = (page - 1) * limit;
+  const take = limit;
+
+  const where: Prisma.RecipeWhereInput = {};
+
+  if (categoryId) {
+    where.categoryId = categoryId;
+  }
+
+  if (search) {
+    where.title = {
+      contains: search,
+      mode: "insensitive",
+    };
+  }
+
+  const orderBy: Prisma.RecipeOrderByWithRelationInput = {};
+  orderBy[sortBy] = order;
+
+  const [recipes, total] = await Promise.all([
+    prisma.recipe.findMany({
+      where,
+      skip,
+      take,
+      orderBy,
+      include: {
+        category: true,
+        tags: true,
+      },
+    }),
+    prisma.recipe.count({ where }),
+  ]);
+
+  res.status(200).json({
+    data: recipes,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
     },
   });
-
-  res.status(200).json(recipes);
 };
 
 // Get recipe by id ==============================================================

@@ -1,5 +1,8 @@
 import express from "express";
 import type { NextFunction, Request, Response } from "express";
+import swaggerUi from "swagger-ui-express";
+
+import { generateOpenApiDocument } from "./src/openapi.ts";
 import recipesRoutes from "./src/routes/recipes.routes.ts";
 import categoriesRoutes from "./src/routes/categories.routes.ts";
 import tagsRoutes from "./src/routes/tags.routes.ts";
@@ -8,6 +11,9 @@ import reviewsRoutes from "./src/routes/reviews.routes.ts";
 const app = express();
 
 app.use(express.json());
+const openApiDocument = generateOpenApiDocument();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument))
 
 app.use("/api/recipes", recipesRoutes);
 app.use("/api/categories", categoriesRoutes);
