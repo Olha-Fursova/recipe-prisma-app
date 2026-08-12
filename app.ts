@@ -23,6 +23,15 @@ app.use((_req: Request, res: Response) => {
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
 
+  if (err.type === "entity.parse.failed") {
+    return res.status(400).json({
+      error: "Validation failed",
+      details: {
+        body: ["Invalid JSON format in request body"],
+      },
+    });
+  }
+
   if (err.code === "P2025") {
     return res.status(404).json({ error: "Resource not found" });
   }
@@ -38,9 +47,9 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ error: "Internal server error" });
 });
 
-const PORT = process.env.PORT || 3000;
-
 // Listener
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
