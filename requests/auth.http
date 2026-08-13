@@ -1,0 +1,36 @@
+### Реєстрація нового користувача
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "chef_olena",
+  "email": "olena@example.com",
+  "password": "securepass123",
+  "name": "Олена Кравец"
+}
+
+### Логін
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "chef_olena",
+  "password": "securepass123"
+}
+
+### Оновлення токенів
+POST http://localhost:3000/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "8449cc0d17b60e56dd97c1efee5808f6bb019603147cc1ac26e2e4acc5b811c0766ecaa9a2610705"
+}
+
+### Вихід
+POST http://localhost:3000/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "вставте refresh token з відповіді логіну"
+}
+
